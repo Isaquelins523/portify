@@ -1,0 +1,9 @@
+import styled from "styled-components";
+
+export const PageWrapper = styled.div`
+  min-height: 100vh;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
