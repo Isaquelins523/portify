@@ -1,12 +1,11 @@
 import React from "react";
 import { LoginForm } from "../../components/loginform/LoginForm.tsx";
-import { PageWrapper } from "./style.js";
 
 const LoginPage: React.FC = () => {
   return (
-    <PageWrapper>
+    <div className="min-h-[100vh] bg-[#f3f4f6] flex items-center justify-center">
       <LoginForm />
-    </PageWrapper>
+    </div>
   );
 };
 

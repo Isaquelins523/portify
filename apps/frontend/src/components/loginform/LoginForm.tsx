@@ -1,30 +1,15 @@
-import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  Title,
-  Label,
-  Input,
-  Message,
-  Button,
-  Form,
-  ContainerRight,
-  BiggerContainer,
-  ContainerLeft,
-} from "./style";
-import { useAuthActions } from "../../stores/useAuth";
-import Logo from "../../assets/Portify-logo.png";
 
-interface LoginFormInputs {
+import { useAuthActions } from "../../stores/useAuth.ts";
+import Logo from "../../assets/Portify-logo.png";
+import { FormField } from "../formField/FormField.tsx";
+
+type LoginFormInputs = {
   username: string;
   password: string;
-}
-
-interface MessageType {
-  type: "error" | "success";
-  text: string;
-}
+};
 
 export const LoginForm: React.FC = () => {
   const { login } = useAuthActions();
@@ -38,52 +23,54 @@ export const LoginForm: React.FC = () => {
     const result = await login(data.username, data.password);
 
     if (result.success) {
-      toast.success("Login bem-sucedido!");
-    } else {
-      toast.error(result.message || "Erro no login");
+      return toast.success("Login successfully!");
     }
+    return toast.error(result.message || "Error login");
   };
 
   return (
-    <BiggerContainer>
-      <ContainerLeft>
-        <img src={Logo} alt="Logo" />
-      </ContainerLeft>
+    <div className="flex w-screen h-screen bg-gray-100 ">
+      <div className="bg-[#4682b4] w-1/2 h-screen flex items-center justify-center">
+        <img
+          className="w-3/5 h-auto object-cover"
+          src={Logo}
+          alt="Logo"
+          loading="lazy"
+        />
+      </div>
 
-      <ContainerRight>
-        <Title>Login</Title>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <Label>Usuário</Label>
-            <Input
-              type="text"
-              placeholder="Digite seu usuario"
-              {...register("username", { required: "Campo obrigatório" })}
-            />
-            {errors.username && (
-              <Message type="error">{errors.username.message}</Message>
-            )}
-          </div>
+      <div className="bg-[#fff] w-[400px] overflow-hidden my-20 mx-auto p-8 g-4 bg-white rounded-[12px] shadow-[0_5px_20px_rgba(0,0,0,0.1)] flex md:flex-row flex-col max-h-[400px] mt-[100px] justify-center  ">
+        <h1 className="text-center text-[1.8rem] mb-[1.5rem]">Login</h1>
+        <form
+          className="flex flex-col items-center gap-[1.3rem] "
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <FormField
+            label="User"
+            placeholder="Enter your username"
+            name="username"
+            register={register}
+            errors={errors}
+          />
 
-          <div>
-            <Label>Senha</Label>
-            <Input
-              type="password"
-              placeholder="Digite sua senha"
-              {...register("password", { required: "Campo obrigatório" })}
-            />
-            {errors.password && (
-              <Message type="error">{errors.password.message}</Message>
-            )}
-          </div>
+          <FormField
+            label="Password"
+            placeholder="Enter your password"
+            name="password"
+            type="password"
+            register={register}
+            errors={errors}
+          />
 
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Entrando..." : "Entrar"}
-          </Button>
-        </Form>
-      </ContainerRight>
-
-      <ToastContainer position="top-right" theme="colored" autoClose={3000} />
-    </BiggerContainer>
+          <button
+            className="bg-[#4682b4] text-[#fff] font-[bold] p-3 border-0 rounded-[6px] text-base w-[22vw] h-[30px] text-[1.1rem] hover:bg-[#4338ca] cursor-[pointer] transition-colors duration-200 ease-in-out disabled:bg-[#a5b4fc] disabled:cursor-not-allowed"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Entering..." : "Enter"}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
