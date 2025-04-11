@@ -6,16 +6,21 @@ import { useAuthActions } from "../../stores/useAuth.ts";
 import Logo from "../../assets/Portify-logo.png";
 import { FormField } from "../formField/FormField.tsx";
 import { useEffect } from "react";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 type LoginFormInputs = {
   username: string;
   password: string;
 };
 
-const schema = Yup.object().shape({
-  username: Yup.string().required("Username is required"),
-  password: Yup.string().min(6).required("Password is required"),
+const schema = z.object({
+  username: z
+    .string()
+    .min(3, { message: "This field must have at least 3 characters" }),
+  password: z
+    .string()
+    .min(6, { message: "This field must have at least 6 characters" }),
 });
 
 export const LoginForm: React.FC = () => {
@@ -26,7 +31,7 @@ export const LoginForm: React.FC = () => {
     formState: { errors, isSubmitting },
     reset,
     setFocus,
-  } = useForm<LoginFormInputs>({ resolver: yupResolver(schema) });
+  } = useForm<LoginFormInputs>({ resolver: zodResolver(schema) });
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     const result = await login(data.username, data.password);
