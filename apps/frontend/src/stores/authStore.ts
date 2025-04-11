@@ -17,7 +17,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   // Função de login(dummy neste caso)
   login: async (username, password) => {
-    if (username === "admin" && password === "admin") {
+    if (username === "admin" && password === "admin1234") {
       set({
         accessToken: "dummy-access-token",
         refreshToken: "dummy-refresh-token",

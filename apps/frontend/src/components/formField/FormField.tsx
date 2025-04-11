@@ -30,11 +30,7 @@ export const FormField = ({
         {...rest}
       />
       {errors[name] && (
-        <p
-          className={`text-center mt-auto font-bold text-[1rem] ${
-            type === "success" ? "text-green-500" : "text-red-500"
-          }`}
-        >
+        <p className="text-center mt-auto font-bold text-[1rem] text-[#ff0000]">
           {String(errors[name]?.message)}
         </p>
       )}

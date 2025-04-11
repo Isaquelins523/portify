@@ -5,11 +5,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuthActions } from "../../stores/useAuth.ts";
 import Logo from "../../assets/Portify-logo.png";
 import { FormField } from "../formField/FormField.tsx";
-
+import { useEffect } from "react";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 type LoginFormInputs = {
   username: string;
   password: string;
 };
+
+const schema = Yup.object().shape({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().min(6).required("Password is required"),
+});
 
 export const LoginForm: React.FC = () => {
   const { login } = useAuthActions();
@@ -17,16 +24,24 @@ export const LoginForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginFormInputs>();
+    reset,
+    setFocus,
+  } = useForm<LoginFormInputs>({ resolver: yupResolver(schema) });
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     const result = await login(data.username, data.password);
 
     if (result.success) {
+      reset();
       return toast.success("Login successfully!");
     }
+    reset();
     return toast.error(result.message || "Error login");
   };
+
+  useEffect(() => {
+    setFocus("username");
+  }, [setFocus]);
 
   return (
     <div className="flex w-screen h-screen bg-gray-100 ">
