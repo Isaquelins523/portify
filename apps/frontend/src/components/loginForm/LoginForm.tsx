@@ -5,23 +5,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuthActions } from "../../stores/useAuth.ts";
 import Logo from "../../assets/Portify-logo.png";
 import { FormField } from "../formField/FormField.tsx";
-import { useEffect } from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { schema } from "./SchemaValidation.tsx";
 
 type LoginFormInputs = {
   username: string;
   password: string;
 };
-
-const schema = z.object({
-  username: z
-    .string()
-    .min(3, { message: "This field must have at least 3 characters" }),
-  password: z
-    .string()
-    .min(6, { message: "This field must have at least 6 characters" }),
-});
 
 export const LoginForm: React.FC = () => {
   const { login } = useAuthActions();
@@ -30,7 +20,6 @@ export const LoginForm: React.FC = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-    setFocus,
   } = useForm<LoginFormInputs>({ resolver: zodResolver(schema) });
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
@@ -43,10 +32,6 @@ export const LoginForm: React.FC = () => {
     reset();
     return toast.error(result.message || "Error login");
   };
-
-  useEffect(() => {
-    setFocus("username");
-  }, [setFocus]);
 
   return (
     <div className="flex w-screen h-screen bg-gray-100 ">
@@ -71,6 +56,7 @@ export const LoginForm: React.FC = () => {
             name="username"
             register={register}
             errors={errors}
+            autofocus={true}
           />
 
           <FormField

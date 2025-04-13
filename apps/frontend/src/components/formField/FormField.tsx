@@ -8,6 +8,7 @@ interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   type?: string;
   register: UseFormRegister<any>;
   errors: FieldErrors;
+  autofocus?: boolean;
 }
 
 export const FormField = ({
@@ -23,6 +24,7 @@ export const FormField = ({
     <div>
       <label className="text-[1rem] font-[bold] p-[0.6rem]">{label}</label>
       <input
+        autoFocus={rest.autofocus}
         className="p-[0.6rem] border border-[#ccc] rounded-[6px] text-[1rem]"
         type={type}
         placeholder={placeholder}
