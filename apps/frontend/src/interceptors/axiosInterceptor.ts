@@ -10,10 +10,6 @@ export const createAxiosWithAuthInterceptor = () => {
     (config) => {
       const token = useAuthStore.getState().accessToken;
 
-      if (!config.headers) {
-        config.headers = {};
-      }
-
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }
